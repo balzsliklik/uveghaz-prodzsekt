@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace prodzsekt
+namespace uveghazrendszer
 {
-
-	enum Szereepkor
+	enum Szerepkor
 	{
-		ADMIN, KERTESZ, TECHNIKUS
+		KERTESZ,
+		TECHNIKUS,
+		ADMIN
 	}
 
 	internal class Enumok

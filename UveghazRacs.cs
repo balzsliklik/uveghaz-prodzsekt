@@ -3,22 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Xml.Serialization;
 
-namespace prodzsekt
+namespace uveghazrendszer
 {
 	internal class UveghazRacs
 	{
 		int meret;
 		Cella[,] kert;
+
 		public UveghazRacs(int meret)
 		{
 			this.meret = meret;
 			this.kert = new Cella[this.meret, this.meret];
+			Parcellaz();
 		}
-		private void Parcellazas()
+
+		private void Parcellaz()
 		{
-			for(int i = 0; i<this.kert.GetLength(0); i++)
+			for (int i = 0; i < this.kert.GetLength(0); i++)
 			{
 				for (int j = 0; j < this.kert.GetLength(1); j++)
 				{
@@ -26,69 +28,83 @@ namespace prodzsekt
 				}
 			}
 		}
-		public Cella CellaLekerdezes(int x, int y)
-		{
-			return kert[x-1, y-1];
 
-		}
-		public void Telepit(int x, int y, NovenyFaj noveny, int egyedszam)
+		public Cella CellaLekerdez(int x, int y)
 		{
-			bool sikeres = kert[x-1, y-1].Beultet(noveny, egyedszam);
+			return kert[x - 1, y - 1];
+		}
+
+		public void Telepit(int x, int y, Novenyfaj noveny, int egyedszam)
+		{
+			bool sikeres = kert[x - 1, y - 1].Beultet(noveny, egyedszam);
 			if (sikeres)
 			{
-				Console.WriteLine($"{noveny.Nev} beültetve a {x} - {y} agyasba");
+				Console.WriteLine($"{noveny.Nev} beültetve a {x}-{y} ágyásba.");
 			}
 			else
 			{
-				Console.WriteLine($"{noveny.Nev} nem lett beultetve a {x} - {y} agyasba");
+				Console.WriteLine($"{noveny.Nev} nem lett beültetve.. :c");
 			}
 		}
 
-		public void Kiiratas()
-		{
-			Console.WriteLine("\n-------------------------------------------------------");
-			for (int i = 0; i< this.kert.GetLength(0); i++)
-			{
-				Console.Write("|");
-				for (int j = 0; j< this.kert.GetLength(1); j++)
-				{
-					if (kert[i, j].UresCella)
-					{
-						Console.Write($"| {"ÜRES", 8} |");
-					}else
-					{
-						Console.Write($"| {kert[i, j].Noveny.Azonosito,3} {kert[i,j].EgyedSzam}db |");
-					}
-					
 
-				}
-				Console.Write("\n-------------------------------------------------------");
-			}
-			Console.WriteLine();
-		}
-
-		public void Novlelse(int x, int y, int mennyiseg)
+		public void Noveles(int x, int y, int mennyiseg)
 		{
-			kert[x-1, y-1].Noveles(mennyiseg);
-			Console.WriteLine($"{x}-{y} ágyás novénye a {kert[x-1,y-1].Noveny.Nev}  uj egyedszám: {kert[x - 1, y - 1].Noveny.Egyedszam}");
-			if(kert[x - 1, y - 1].Noveny.OptimalisSuruseg > kert[x-1, y - 1].Noveny.Egyedszam)
+			kert[x - 1, y - 1].Noveles(mennyiseg);
+			Console.WriteLine($"{x}, {y} ágyás növénye, a(z) {kert[x - 1, y - 1].Noveny.Nev}, egyedszám: {kert[x - 1, y - 1].EgyedSzam}");
+			if (kert[x - 1, y - 1].Noveny.OptimalSuruseg > kert[x - 1, y - 1].EgyedSzam)
 			{
-				Console.WriteLine("novenyek oksak");
+				Console.WriteLine("A növények jól érzik magukat.");
 			}
 			else
 			{
-				Console.WriteLine("novenyek tul sokan vanak");
-				Csokkentes(x - 1, y - 1, (kert[x - 1, y - 1].Noveny.Egyedszam - kert[x - 1, y - 1].Noveny.OptimalisSuruseg));
+				Console.WriteLine("A növéynek sokan vannak, nem érzik jól magukat.");
+				Csokkentes(x, y, Math.Abs(kert[x - 1, y - 1].Noveny.OptimalSuruseg - kert[x - 1, y - 1].EgyedSzam));
 			}
 		}
 
 		public void Csokkentes(int x, int y, int mennyiseg)
 		{
 			kert[x - 1, y - 1].Csokkentes(mennyiseg);
-			Console.WriteLine($"{x}-{y} ágyás csokkentese a {kert[x - 1, y - 1].Noveny.Nev}  uj egyedszám: {kert[x - 1, y - 1].Noveny.Egyedszam}");
-			Console.WriteLine($"{x}-{y} ágyás  {kert[x - 1, y - 1].Noveny.Nev}  uj egyedszám: {kert[x - 1, y - 1].Noveny.Egyedszam}");
-
-
+			Console.WriteLine($"{x}, {y} ágyás növénye, a(z) {kert[x - 1, y - 1].Noveny.Nev}, egyedszám: {kert[x - 1, y - 1].EgyedSzam}");
 		}
+
+		public void CellaUrit(int x, int y)
+		{
+			kert[x - 1, y - 1].Urit();
+		}
+
+		public void Kiiratas()
+		{
+			for (int i = 0; i < this.kert.GetLength(0); i++)
+			{
+				Console.WriteLine();
+				for (int v = 0; v < this.kert.GetLength(0); v++)
+				{
+					Console.Write("----------");
+				}
+				Console.WriteLine();
+				Console.Write("|");
+				for (int j = 0; j < this.kert.GetLength(1); j++)
+				{
+					if (kert[i, j].UresCella)
+					{
+						Console.Write($"  Üres  |");
+					}
+					else
+					{
+						Console.Write($"{kert[i, j].Noveny.Azonosito,3} {kert[i, j].EgyedSzam}db |");
+					}
+				}
+				Console.WriteLine();
+				for (int v = 0; v < this.kert.GetLength(0); v++)
+				{
+					Console.Write("----------");
+				}
+				Console.WriteLine();
+				//Console.WriteLine("\n------------------------------------------------------------------------------------------");
+			}
+		}
+
 	}
 }

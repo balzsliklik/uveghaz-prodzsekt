@@ -4,15 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace prodzsekt
+namespace uveghazrendszer
 {
 	internal class Kezelo
 	{
 		private string nev;
 		private string azonosito;
-		private Szereepkor szerepkor;
+		private Szerepkor szerepkor;
 
-		public Kezelo(string nev, string azonosito, Szereepkor szerepkor)
+		public Kezelo(string nev, string azonosito, Szerepkor szerepkor)
 		{
 			this.nev = nev;
 			this.azonosito = azonosito;
@@ -21,6 +21,12 @@ namespace prodzsekt
 
 		public string Nev { get => nev; set => nev = value; }
 		public string Azonosito { get => azonosito; set => azonosito = value; }
-		internal Szereepkor Szerepkor { get => szerepkor; set => szerepkor = value; }
+		internal Szerepkor Szerepkor { get => szerepkor; set => szerepkor = value; }
+
+		public override string ToString()
+		{
+			return $"{this.nev}: {this.szerepkor}";
+		}
+
 	}
 }
