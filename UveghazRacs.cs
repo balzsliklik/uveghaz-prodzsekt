@@ -106,5 +106,25 @@ namespace uveghazrendszer
 			}
 		}
 
+		public void CellaUrites(int x, int y)
+		{
+			kert[x - 1, y - 1].Urit();
+			Console.WriteLine($"{x-1} - {y-1} cella ki lett ürítve");
+		}
+		public void Szomszedok(int x, int y)
+		{
+			Console.WriteLine($"{x - 1} - {y - 1} cell szomszédjai: \n----------------");
+			for (int i = 0; i< this.kert.GetLength(0); i++)
+			{
+				for (int j = 0; j< this.kert.GetLength(1); j++)
+				{
+					if ((j - (x-1) == 1 || j - (x - 1) == -1)&& (i - (x - 1) == 1 || i - (x - 1) == -1))
+					{
+
+					}
+				}
+			}
+		}
+
 	}
 }
